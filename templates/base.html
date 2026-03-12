@@ -1,12 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>{% block title %}Dashboard{% endblock %}</title>
 </head>
 <body>
-<h1>Menu</h1>
-<h3><a href="/logout">Logout</a></h3>
+
+    <h1>Menu</h1>
+    <h2>Admin</h2>
+    <a href="/admin_gv_dashboard">Quản lí giảng viên</a>
+    <a href="/admin_hocphan_list">Quản lí học phần</a>
+    <h2>Admin Khoa</h2>
+    <a href="/adminKhoa_hocphan_dashboard">Quản lí học phần của khoa</a>
+    <h2>Giảng viên</h2>
+    <a href="/gv_dashboard">Học phần phân công</a>
+
+    <a href="/logout">Logout</a>
+
+    <hr>
+
+    {% block content %}
+    {% endblock %}
 
 </body>
 </html>

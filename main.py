@@ -77,6 +77,22 @@ def logout():
     # Remove 'username' from the session
     return redirect(url_for('index'))
 
+@app.route("/admin_gv_dashboard")
+def admin_gv_dashboard():
+    return render_template("admin_gv_dashboard.html")
+
+@app.route("/admin_hocphan_list")
+def admin_hocphan_list():
+    return render_template("admin_hocphan_list.html")
+
+@app.route("/adminKhoa_hocphan_dashboard")
+def adminKhoa_hocphan_dashboard():
+    return render_template("adminKhoa_hocphan_dashboard.html")
+
+@app.route("/gv_dashboard")
+def gv_dashboard():
+    return render_template("gv_dashboard.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
 
