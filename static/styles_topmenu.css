@@ -1,45 +1,93 @@
-.menu-bar {
-    display: flex;
-    background: #333;
+body{
+    margin:0;
+    font-family:Arial;
 }
 
-.menu-item {
-    position: relative;
+/* MENU BAR */
+.menu-bar{
+    display:flex;
+    background:#2c3e50;
+    padding:0;
 }
 
-.menu-item a {
-    display: block;
-    padding: 12px 18px;
-    color: white;
-    text-decoration: none;
+/* MENU ITEM */
+.menu-item{
+    position:relative;
 }
 
-.menu-item:hover {
-    background: #444;
+.menu-item > a{
+    display:block;
+    padding:14px 20px;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
 }
 
-.dropdown {
-    display: none;
-    position: absolute;
-    background: #444;
-    min-width: 200px;
+/* DROPDOWN */
+.dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:200px;
+    background:white;
+    box-shadow:0 5px 10px rgba(0,0,0,0.2);
 }
 
-.dropdown a {
-    display: block;
-    padding: 10px 15px;
-    color: white;
+.dropdown a{
+    display:block;
+    padding:10px 15px;
+    text-decoration:none;
+    color:black;
 }
 
-/* Highlight when mouse hovers */
-.dropdown a:hover {
-    background: #666;
+.dropdown a:hover{
+    background:#f1f1f1;
 }
 
-.menu-item:hover .dropdown {
-    display: block;
+/* SHOW DROPDOWN */
+.menu-item:hover .dropdown{
+    display:block;
 }
 
+/* ===== COLORS FOR EACH MENU ===== */
+
+/* Admin */
+.admin > a{
+    background:#e74c3c;
+}
+
+.admin .dropdown{
+    border-top:4px solid #e74c3c;
+}
+
+/* Admin Khoa */
+.khoa > a{
+    background:#9b59b6;
+}
+
+.khoa .dropdown{
+    border-top:4px solid #9b59b6;
+}
+
+/* Giảng viên */
+.gv > a{
+    background:#27ae60;
+}
+
+.gv .dropdown{
+    border-top:4px solid #27ae60;
+}
+
+/* User */
 .user {
     margin-left:auto;
+}
+
+.user > a{
+    background:#3498db;
+}
+
+.user .dropdown{
+    border-top:4px solid #3498db;
 }

@@ -2,18 +2,18 @@
 <html>
 <head>
     <title>Đăng nhập</title>
-     <link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles_login.css') }}">
 </head>
 <body>
+<div class="login-container">
     <h1>Đăng nhập vào hệ thống phân quyền</h1>
-    <form method="POST">
+    <form method="POST" class="login-form">
         <label for="username">Tên đăng nhập:</label>
         <input type="text" id="username" name="txt_username" required>
-        <br><br>
         <label for="password">Mật khẩu:</label>
         <input type="text" id="password" name="txt_password" required>
-        <br>        <br>         <br>
         <button type="submit">Login</button>
     </form>
+</div>
 </body>
 </html>

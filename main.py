@@ -18,7 +18,7 @@ def index():
             obj_CanBo = get_obj_CanBo(session['current_user']['MaGV'])
             session['current_user']["LaTruongKhoa"] = obj_CanBo[6]
         return render_template('base.html')
-    return 'Chào mừng! <a href="/login">Login</a>'
+    return render_template('welcome.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -69,7 +69,7 @@ def get_obj_CanBo(MaGV):
 
     # sqlcommand
     sqlcommand = "select * from CanBo where MaQL = ? "
-    cursor.execute(sqlcommand, (MaGV))
+    cursor.execute(sqlcommand, (MaGV,))
 
     # return object
     obj_CanBo = cursor.fetchone()

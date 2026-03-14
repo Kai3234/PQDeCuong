@@ -11,8 +11,8 @@
 
     {% if 'current_user' in session %}
 
-        {% if session.current_user.LaAdmin == 1 %}
-        <div class="menu-item">
+        {% if session.current_user.LaAdmin != 0 %}
+        <div class="menu-item admin">
             <a href="#">Admin ▾</a>
             <div class="dropdown">
                 <a href="/admin_gv_dashboard">Quản lí giảng viên</a>
@@ -21,8 +21,8 @@
         </div>
         {% endif %}
 
-        {% if session.current_user.LaTruongKhoa == 1 %}
-        <div class="menu-item">
+        {% if session.current_user.LaTruongKhoa != 0 %}
+        <div class="menu-item khoa">
             <a href="#">Admin Khoa ▾</a>
             <div class="dropdown">
                 <a href="/adminKhoa_hocphan_dashboard">Quản lí học phần của khoa</a>
@@ -31,7 +31,7 @@
         {% endif %}
 
         {% if session.current_user.MaGV is not none %}
-        <div class="menu-item">
+        <div class="menu-item gv">
             <a href="#">Giảng viên ▾</a>
             <div class="dropdown">
                 <a href="/gv_dashboard">Học phần phân công</a>

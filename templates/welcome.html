@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles_welcome.css') }}">
+
 </head>
 <body>
-
+    <div class="container">
+        <h1>Welcome!</h1>
+        <p>Hệ thống phân quyền điều chỉnh đề cương cho giáo viên.</p>
+        <a href="/login" class="btn">Đăng nhập</a>
+    </div>
 </body>
 </html>
