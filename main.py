@@ -1,4 +1,5 @@
 import sqlite3
+from asyncio.windows_events import NULL
 
 from flask import (Flask, render_template,
                    request, redirect,
@@ -11,7 +12,11 @@ app.secret_key = 'felix_pham'
 def index():
     # Check if 'username' key exists in the session
     if 'current_user' in session:
-        username = session['current_user']['TenTK']
+        if session['current_user']["MaGV"] is None:
+            session['current_user']["LaTruongKhoa"] = 0
+        else:
+            obj_CanBo = get_obj_CanBo(session['current_user']['MaGV'])
+            session['current_user']["LaTruongKhoa"] = obj_CanBo[6]
         return render_template('base.html')
     return 'Chào mừng! <a href="/login">Login</a>'
 
@@ -22,12 +27,12 @@ def login():
         MK = request.form['txt_password']
         if check_exists(TenTK, MK):
             # Store 'username' in the session
-            obj_user = get_obj_user(TenTK, MK)
+            obj_user = get_obj_TaiKhoan(TenTK, MK)
             if int(obj_user[0]) > 0: # Neu ton tai ID
                 obj_user = {
-                    "id": obj_user[0],
+                    "MaTK": obj_user[0],
                     "TenTK": obj_user[1],
-                    "MaGV": obj_user[2],
+                    "MaGV": obj_user[3],
                     "LaAdmin": obj_user[4],
                 }
                 session['current_user'] = obj_user
@@ -36,7 +41,7 @@ def login():
     # Trường hợp mặc định là vào trang login
     return render_template('login.html')
 
-def get_obj_user(TenTK, MK):
+def get_obj_TaiKhoan(TenTK, MK):
     result = []
     sqldbname = 'db/decuong.db'
     # Khai bao bien tro toi db
@@ -51,6 +56,25 @@ def get_obj_user(TenTK, MK):
     obj_user = cursor.fetchone()
     if (len(obj_user)>0): # Moi doi tuong la 1 danh sach
         result = obj_user
+    conn.close()
+    return result
+
+def get_obj_CanBo(MaGV):
+    result = []
+    sqldbname = 'db/decuong.db'
+
+    # Khai bao bien tro toi db
+    conn = sqlite3.connect(sqldbname)
+    cursor = conn.cursor()
+
+    # sqlcommand
+    sqlcommand = "select * from CanBo where MaQL = ? "
+    cursor.execute(sqlcommand, (MaGV))
+
+    # return object
+    obj_CanBo = cursor.fetchone()
+    if (len(obj_CanBo) > 0):  # Moi doi tuong la 1 danh sach
+        result = obj_CanBo
     conn.close()
     return result
 

@@ -1,0 +1,45 @@
+.menu-bar {
+    display: flex;
+    background: #333;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-item a {
+    display: block;
+    padding: 12px 18px;
+    color: white;
+    text-decoration: none;
+}
+
+.menu-item:hover {
+    background: #444;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    background: #444;
+    min-width: 200px;
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+}
+
+/* Highlight when mouse hovers */
+.dropdown a:hover {
+    background: #666;
+}
+
+.menu-item:hover .dropdown {
+    display: block;
+}
+
+.user {
+    margin-left:auto;
+}
