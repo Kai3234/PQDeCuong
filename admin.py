@@ -1,15 +1,9 @@
 import sqlite3
-from flask import render_template, request, redirect
-from main import app
+from flask import render_template, request, redirect, session
+from main import app, get_db
 
 
 DATABASE = "db/decuong.db"
-
-
-def get_db():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 
 # ======================
@@ -18,6 +12,8 @@ def get_db():
 
 @app.route("/admin_gv_dashboard")
 def admin_gv_dashboard():
+    if "current_user" not in session:
+        return redirect("/login")
 
     conn = get_db()
     cur = conn.cursor()
@@ -57,6 +53,7 @@ def admin_gv_dashboard():
 @app.route("/update_giangvien", methods=["POST"])
 def update_giangvien():
 
+
     MaQL = request.form["MaQL"]
     MaDV = request.form["MaDV"]
 
@@ -88,6 +85,8 @@ def update_giangvien():
 
 @app.route("/admin_hocphan_list")
 def admin_hocphan_list():
+    if "current_user" not in session:
+        return redirect("/login")
 
     conn = get_db()
     cur = conn.cursor()

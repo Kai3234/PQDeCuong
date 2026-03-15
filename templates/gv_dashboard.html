@@ -1,6 +1,61 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
-<h2>Dashboard Admin GV</h2>
-<p>Welcome user</p>
+<div class="gv-container">
+  <div class="gv-title">Danh sách đề cương được phân công hiệu chỉnh</div>
+
+  <div class="gv-info">
+    <div class ="gv-info-title">Thông tin giảng viên:</div>
+
+    <b>Tên giảng viên:</b> {{ ThongTinCanBo.TenGV }} <br />
+
+    <b>Mã quản lý:</b> {{ ThongTinCanBo.MaQL }} <br />
+
+    <b>Số hiệu công chức:</b> {{ ThongTinCanBo.SoHieu }} <br />
+
+    <b>Loại giảng viên:</b> {{ ThongTinCanBo.LoaiGV }} <br />
+
+    <b>Email:</b> {{ ThongTinCanBo.Email }} <br />
+
+    <b>Khoa:</b> {{ ThongTinCanBo.TenDV }}
+
+    {% if session.current_user.LaTruongKhoa == 1 %}
+      <b>- Trưởng khoa</b>
+    {% endif %}
+  </div>
+
+  <table class="gv-table">
+    <thead>
+      <tr>
+        <th>Mã học phần</th>
+        <th>Tên học phần</th>
+        <th>Số tín chỉ</th>
+        <th>Trình độ</th>
+        <th>Khoa</th>
+        <th>Thời gian phân công</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% if dsHocPhan %} {% for hp in dsHocPhan %}
+
+      <tr>
+        <td>{{ hp.MaHP }}</td>
+        <td>{{ hp.TenHP }}</td>
+        <td>{{ hp.SoTC }}</td>
+        <td>{{ hp.TrinhDo }}</td>
+        <td>{{ hp.TenDV }}</td>
+        <td>{{ hp.ThoiGian }}</td>
+      </tr>
+
+      {% endfor %} {% else %}
+
+      <tr>
+        <td colspan="3" class="empty-row">Chưa có học phần được phân công</td>
+      </tr>
+
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
 {% endblock %}

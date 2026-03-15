@@ -1,6 +1,41 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
-<h2>Dashboard Admin GV</h2>
-<p>Welcome user</p>
+<div class="dashboard-container">
+  <div class="dashboard-title">Danh sách học phần của khoa</div>
+
+  <table class="dashboard-table">
+    <thead>
+      <tr>
+        <th>Mã học phần</th>
+        <th>Tên học phần</th>
+        <th>Số tín chỉ</th>
+        <th>Trình độ</th>
+        <th>Khoa</th>
+        <th>Phân công</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for hp in dsHocPhan %}
+      <tr>
+        <td>{{ hp.MaHP }}</td>
+        <td>{{ hp.TenHP }}</td>
+        <td>{{ hp.SoTC }}</td>
+        <td>{{ hp.TrinhDo }}</td>
+        <td>{{ hp.TenDV }}</td>
+
+        <td>
+          <a
+            class="btn-action btn-edit"
+            href="/adminKhoa_hocphan_authorize/{{ hp.MaHP }}"
+          >
+            Phân công
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
 {% endblock %}
