@@ -4,31 +4,37 @@
   <div class="dashboard-title">Danh sách học phần của khoa</div>
 
   <table class="dashboard-table">
-    <tr>
-      <th>Mã học phần</th>
-      <th>Tên học phần</th>
-      <th>Số tín chỉ</th>
-      <th>Phân công</th>
-    </tr>
+    <thead>
+      <tr>
+        <th>Mã học phần</th>
+        <th>Tên học phần</th>
+        <th>Số tín chỉ</th>
+        <th>Trình độ</th>
+        <th>Khoa</th>
+        <th>Phân công</th>
+      </tr>
+    </thead>
 
-    {% for hp in dsHocPhan %}
+    <tbody>
+      {% for hp in dsHocPhan %}
+      <tr>
+        <td>{{ hp.MaHP }}</td>
+        <td>{{ hp.TenHP }}</td>
+        <td>{{ hp.SoTC }}</td>
+        <td>{{ hp.TrinhDo }}</td>
+        <td>{{ hp.TenDV }}</td>
 
-    <tr>
-      <td>{{ hp.MaHP }}</td>
-      <td>{{ hp.TenHP }}</td>
-      <td>{{ hp.SoTC }}</td>
-
-      <td>
-        <a
-          class="btn-action btn-edit"
-          href="/adminKhoa_hocphan_authorize/{{ hp.MaHP }}"
-        >
-          Phân công
-        </a>
-      </td>
-    </tr>
-
-    {% endfor %}
+        <td>
+          <a
+            class="btn-action btn-edit"
+            href="/adminKhoa_hocphan_authorize/{{ hp.MaHP }}"
+          >
+            Phân công
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
 </div>
 

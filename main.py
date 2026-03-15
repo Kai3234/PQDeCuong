@@ -193,12 +193,18 @@ def adminKhoa_hocphan_dashboard():
     cursor = conn.cursor()
 
     cursor.execute(
-        """
-        SELECT *
-        FROM HocPhan
-        WHERE MaDV=?
-        """,
-        (MaDV,),
+    """
+    SELECT HocPhan.MaHP,
+        HocPhan.TenHP,
+        HocPhan.SoTC,
+        HocPhan.TrinhDo,
+        DonVi.TenDV
+    FROM HocPhan
+    LEFT JOIN DonVi
+    ON HocPhan.MaDV = DonVi.MaDV
+    WHERE HocPhan.MaDV=?
+    """,
+    (MaDV,),
     )
 
     dsHocPhan = cursor.fetchall()
@@ -220,36 +226,54 @@ def adminKhoa_hocphan_authorize(MaHP):
     conn = get_db()
     cursor = conn.cursor()
 
-    # lấy học phần
+    # =============================
+    # LẤY THÔNG TIN HỌC PHẦN
+    # =============================
     cursor.execute(
-        """
-        SELECT *
-        FROM HocPhan
-        WHERE MaHP=?
-        """,
-        (MaHP,),
+    """
+    SELECT HocPhan.*,
+           DonVi.TenDV
+    FROM HocPhan
+    LEFT JOIN DonVi
+    ON HocPhan.MaDV = DonVi.MaDV
+    WHERE HocPhan.MaHP=?
+    """,
+    (MaHP,)
     )
 
     hocphan = cursor.fetchone()
 
-    # danh sách giảng viên
-    cursor.execute(
-        """
-        SELECT *
-        FROM CanBo
-        """
-    )
 
+    # =============================
+    # LẤY DANH SÁCH GIẢNG VIÊN
+    # =============================
+    cursor.execute(
+    """
+    SELECT CanBo.MaQL,
+        CanBo.TenGV,
+        CanBo.MaDV,
+        CanBo.Email,
+        CanBo.LoaiGV,
+        CanBo.LaTruongKhoa,
+        DonVi.TenDV
+    FROM CanBo
+    LEFT JOIN DonVi
+    ON CanBo.MaDV = DonVi.MaDV
+    """
+    )
     dsCanBo = cursor.fetchall()
 
-    # giảng viên đã được chọn
+
+    # =============================
+    # GIẢNG VIÊN ĐÃ ĐƯỢC PHÂN CÔNG
+    # =============================
     cursor.execute(
-        """
-        SELECT MaGV
-        FROM PhanCongHC
-        WHERE MaHP=?
-        """,
-        (MaHP,),
+    """
+    SELECT MaGV
+    FROM PhanCongHC
+    WHERE MaHP=?
+    """,
+    (MaHP,)
     )
 
     dsDaChon = [x["MaGV"] for x in cursor.fetchall()]

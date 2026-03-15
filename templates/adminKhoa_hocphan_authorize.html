@@ -3,7 +3,17 @@
 <div class="dashboard-container">
   <div class="dashboard-title">Phân công hiệu chỉnh đề cương</div>
 
-  <h5>Học phần: {{ hocphan.TenHP }}</h5>
+  <div class="hocphan-info">
+    <b>Học phần:</b> {{ hocphan.TenHP }} <br />
+
+    <b>Mã học phần:</b> {{ hocphan.MaHP }} <br />
+
+    <b>Số tín chỉ:</b> {{ hocphan.SoTC }} <br />
+
+    <b>Trình độ:</b> {{ hocphan.TrinhDo }} <br />
+
+    <b>Khoa:</b> {{ hocphan.MaDV }} - {{ hocphan.TenDV }}
+  </div>
 
   <form method="POST" action="/adminKhoa_hocphan_authorize_save">
     <input type="hidden" name="MaHP" value="{{ hocphan.MaHP }}" />
@@ -15,6 +25,9 @@
           <th>Mã GV</th>
           <th>Tên giảng viên</th>
           <th>Khoa</th>
+          <th>Email</th>
+          <th>Loại GV</th>
+          <th>Trưởng khoa</th>
         </tr>
       </thead>
 
@@ -40,7 +53,11 @@
 
           <td>{{ gv.MaQL }}</td>
           <td>{{ gv.TenGV }}</td>
-          <td>{{ gv.MaDV }}</td>
+          <td>{{ gv.MaDV }} - {{ gv.TenDV }}</td>
+          <td>{{ gv.Email }}</td>
+          <td>{{ gv.LoaiGV }}</td>
+
+          <td>{% if gv.LaTruongKhoa == 1 %} ✔ {% else %} - {% endif %}</td>
         </tr>
 
         {% endfor %}

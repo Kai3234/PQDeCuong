@@ -111,3 +111,10 @@
   padding: 20px;
   color: #888;
 }
+.hocphan-info {
+  background: #f5f7fa;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
