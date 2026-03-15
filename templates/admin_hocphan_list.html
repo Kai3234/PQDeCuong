@@ -1,6 +1,96 @@
 {% extends "base.html" %}
 
+{% block title %}
+Quản lí học phần
+{% endblock %}
+
 {% block content %}
-<h2>Dashboard Admin hocphan</h2>
-<p>Welcome user</p>
+
+<div class="container">
+
+<div class="page-header">
+<h2>Quản lí học phần</h2>
+<p>Admin có thể gán học phần cho khoa quản lý</p>
+</div>
+
+<div class="table-wrapper">
+
+<table class="hocphan-table">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Mã HP</th>
+<th>Tên học phần</th>
+<th>Số tín chỉ</th>
+<th>Trình độ</th>
+<th>Khoa quản lý</th>
+<th>Lưu</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for hp in hocphan_list %}
+
+<tr>
+
+<form method="POST" action="/admin/update_hocphan">
+
+<td>{{ hp.id }}</td>
+
+<td>{{ hp.MasoHP }}</td>
+
+<td>{{ hp.TenHP }}</td>
+
+<td>{{ hp.SoTC }}</td>
+
+<td>{{ hp.TrinhDo }}</td>
+
+<td>
+
+<select name="MaDV" class="select-khoa">
+
+{% for dv in donvi_list %}
+
+<option value="{{ dv.id }}"
+{% if dv.id == hp.MaDV %}
+selected
+{% endif %}
+>
+
+{{ dv.Ten }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</td>
+
+<td>
+
+<input type="hidden" name="id" value="{{ hp.id }}">
+
+<button class="btn-save">
+Lưu
+</button>
+
+</td>
+
+</form>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
 {% endblock %}

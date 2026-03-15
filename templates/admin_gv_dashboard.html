@@ -5,6 +5,104 @@ Quản lí giảng viên
 {% endblock %}
 
 {% block content %}
-<h2>Dashboard Admin GV</h2>
-<p>Welcome user</p>
+
+<div class="container">
+
+<div class="page-header">
+<h2>Quản lí giảng viên</h2>
+<p>Admin gán khoa và chọn trưởng khoa</p>
+</div>
+
+<div class="table-wrapper">
+
+<table class="hocphan-table">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Mã QL</th>
+<th>Số hiệu</th>
+<th>Tên GV</th>
+<th>Email</th>
+<th>Khoa</th>
+<th>Loại GV</th>
+<th>Trưởng khoa</th>
+<th>Lưu</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for gv in canbo_list %}
+
+<tr>
+
+<form method="POST" action="/admin/update_giangvien">
+
+<td>{{ gv.id }}</td>
+<td>{{ gv.MaQL }}</td>
+<td>{{ gv.SoHieu }}</td>
+<td>{{ gv.TenGV }}</td>
+<td>{{ gv.Email }}</td>
+
+<td>
+
+<select name="MaDV" class="select-khoa">
+
+{% for dv in donvi_list %}
+
+<option value="{{ dv.id }}"
+{% if dv.id == gv.MaDV %}
+selected
+{% endif %}
+>
+
+{{ dv.Ten }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</td>
+
+<td>{{ gv.LoaiGV }}</td>
+
+<td>
+
+<input type="checkbox"
+name="LaTruongKhoa"
+value="1"
+{% if gv.LaTruongKhoa == 1 %}
+checked
+{% endif %}
+>
+
+</td>
+
+<td>
+
+<input type="hidden" name="id" value="{{ gv.id }}">
+
+<button class="btn-save">
+Lưu
+</button>
+
+</td>
+
+</form>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
 {% endblock %}
