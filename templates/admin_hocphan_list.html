@@ -19,7 +19,6 @@ Quản lí học phần
 
 <thead>
 <tr>
-<th>ID</th>
 <th>Mã HP</th>
 <th>Tên học phần</th>
 <th>Số tín chỉ</th>
@@ -37,9 +36,7 @@ Quản lí học phần
 
 <form method="POST" action="/admin/update_hocphan">
 
-<td>{{ hp.id }}</td>
-
-<td>{{ hp.MasoHP }}</td>
+<td>{{ hp.MaHP }}</td>
 
 <td>{{ hp.TenHP }}</td>
 
@@ -53,13 +50,13 @@ Quản lí học phần
 
 {% for dv in donvi_list %}
 
-<option value="{{ dv.id }}"
-{% if dv.id == hp.MaDV %}
+<option value="{{ dv.MaDV }}"
+{% if dv.MaDV == hp.MaDV %}
 selected
 {% endif %}
 >
 
-{{ dv.Ten }}
+{{ dv.TenDV }}
 
 </option>
 
@@ -71,7 +68,7 @@ selected
 
 <td>
 
-<input type="hidden" name="id" value="{{ hp.id }}">
+<input type="hidden" name="MaHP" value="{{ hp.MaHP }}">
 
 <button class="btn-save">
 Lưu

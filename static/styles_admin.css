@@ -60,11 +60,10 @@ border-bottom: 1px solid #ddd;
 text-align: center;
 }
 
-.hocphan-table tr:hover
+.hocphan-table tbody tr:hover
 {
-background: #f5f7fa;
+background: #f2f6fa;
 }
-
 
 /* ===== select khoa ===== */
 

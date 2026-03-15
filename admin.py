@@ -121,7 +121,7 @@ def admin_hocphan_list():
 # UPDATE HOC PHAN
 # ======================
 
-@app.route("/update_hocphan", methods=["POST"])
+@app.route("/admin/update_hocphan", methods=["POST"])
 def update_hocphan():
 
     MaHP = request.form["MaHP"]
