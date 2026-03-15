@@ -12,11 +12,7 @@ app.secret_key = 'felix_pham'
 def index():
     # Check if 'username' key exists in the session
     if 'current_user' in session:
-        if session['current_user']["MaGV"] is None:
-            session['current_user']["LaTruongKhoa"] = 0
-        else:
-            obj_CanBo = get_obj_CanBo(session['current_user']['MaGV'])
-            session['current_user']["LaTruongKhoa"] = obj_CanBo[6]
+
         return render_template('base.html')
     return render_template('welcome.html')
 
@@ -34,7 +30,15 @@ def login():
                     "TenTK": obj_user[1],
                     "MaGV": obj_user[3],
                     "LaAdmin": obj_user[4],
+                    "LaTruongKhoa": 0,
                 }
+
+                if obj_user["MaGV"] is None:
+                    obj_user["LaTruongKhoa"] = 0
+                else:
+                    obj_CanBo = get_obj_CanBo(obj_user['MaGV'])
+                    obj_user["LaTruongKhoa"] = obj_CanBo[6]
+
                 session['current_user'] = obj_user
 
             return redirect(url_for('index'))

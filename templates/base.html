@@ -11,7 +11,7 @@
 
     {% if 'current_user' in session %}
 
-        {% if session.current_user.LaAdmin != 0 %}
+        {% if session.current_user.LaAdmin == 1 %}
         <div class="menu-item admin">
             <a href="#">Admin ▾</a>
             <div class="dropdown">
@@ -21,7 +21,7 @@
         </div>
         {% endif %}
 
-        {% if session.current_user.LaTruongKhoa != 0 %}
+        {% if session.current_user.LaTruongKhoa == 1 %}
         <div class="menu-item khoa">
             <a href="#">Admin Khoa ▾</a>
             <div class="dropdown">
