@@ -24,21 +24,24 @@ def get_db():
 
 @app.route('/')
 def index():
-    # Check if 'username' key exists in the session
+    # Kiểm tra có tồn tại current_user trong session
     if 'current_user' in session:
-
         return render_template('base.html')
     return render_template('welcome.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Kiểm tra người dùng gửi form
     if request.method == 'POST':
+        # Lấy dữ liệu từ HTML
         TenTK = request.form['txt_username']
         MK = request.form['txt_password']
+
         if check_exists(TenTK, MK):
-            # Store 'username' in the session
+            # Lấy ttin tài khoản từ db
             obj_user = get_obj_TaiKhoan(TenTK, MK)
-            if int(obj_user[0]) > 0: # Neu ton tai ID
+            if int(obj_user[0]) > 0:
+                # Tạo dictionary chứa thông tin của user
                 obj_user = {
                     "MaTK": obj_user[0],
                     "TenTK": obj_user[1],
@@ -47,6 +50,7 @@ def login():
                     "LaTruongKhoa": 0,
                 }
 
+                # Kiểm tra user có là trưởng khoa không
                 if obj_user["MaGV"] is None:
                     obj_user["LaTruongKhoa"] = 0
                 else:
@@ -54,8 +58,8 @@ def login():
                     obj_user["LaTruongKhoa"] = obj_CanBo[6]
 
                 session['current_user'] = obj_user
-
             return redirect(url_for('index'))
+
     # Trường hợp mặc định là vào trang login
     return render_template('login.html')
 
@@ -96,194 +100,43 @@ def get_obj_CanBo(MaGV):
 
 
 def check_exists(TenTK, MK):
-    result = False;
+    result = False
     # Khai bao bien de tro toi db
     conn = get_db()
     cursor = conn.cursor()
-    # sqlcommand = "Select * from storages where "
-    sqlcommand = "Select * from TaiKhoan where TenTK = '"+TenTK+"' and MK = '"+MK+"'"
-    cursor.execute(sqlcommand)
+
+    sqlcommand = "SELECT * FROM TaiKhoan WHERE TenTK=? AND MK=?"
+    cursor.execute(sqlcommand, (TenTK, MK))
     data = cursor.fetchall()
-    print(type(data))
+
+    # Nếu có ít nhất 1 bản ghi
     if len(data)>0:
         result = True
     conn.close()
     return result
 
+# chạy trước mỗi request (mỗi khi người dùng truy cập một route)
 @app.before_request
 def update_truong_khoa():
     if 'current_user' in session:
         user = session['current_user']
 
+        # Kiểm tra current user có là trưởng khoa
         if user["MaGV"] is not None:
             obj_CanBo = get_obj_CanBo(user["MaGV"])
             session['current_user']["LaTruongKhoa"] = obj_CanBo[6]
         else:
             session['current_user']["LaTruongKhoa"] = 0
 
+        # Đánh dấu session đã bị thay đổi để Flask lưu lại
         session.modified = True
 
 @app.route('/logout')
 def logout():
     session.pop('current_user', None)
-    # Remove 'username' from the session
+    # Loại bỏ current_user khỏi session
     return redirect(url_for('index'))
 
-# =============================
-# ADMIN KHOA DASHBOARD
-# =============================
-@app.route("/adminKhoa_hocphan_dashboard")
-def adminKhoa_hocphan_dashboard():
-
-    if "current_user" not in session:
-        return redirect("/login")
-
-    MaGV = session["current_user"]["MaGV"]
-
-    obj_canbo = get_obj_CanBo(MaGV)
-
-    if not obj_canbo:
-        return "Không tìm thấy cán bộ"
-
-    MaDV = obj_canbo["MaDV"]
-
-    conn = get_db()
-    cursor = conn.cursor()
-
-    cursor.execute(
-    """
-    SELECT HocPhan.MaHP,
-        HocPhan.TenHP,
-        HocPhan.SoTC,
-        HocPhan.TrinhDo,
-        DonVi.TenDV
-    FROM HocPhan
-    LEFT JOIN DonVi
-    ON HocPhan.MaDV = DonVi.MaDV
-    WHERE HocPhan.MaDV=?
-    """,
-    (MaDV,),
-    )
-
-    dsHocPhan = cursor.fetchall()
-
-    conn.close()
-
-    return render_template(
-        "adminKhoa_hocphan_dashboard.html",
-        dsHocPhan=dsHocPhan,
-    )
-
-
-# =============================
-# AUTHORIZE GIANG VIEN
-# =============================
-@app.route("/adminKhoa_hocphan_authorize/<MaHP>")
-def adminKhoa_hocphan_authorize(MaHP):
-
-    conn = get_db()
-    cursor = conn.cursor()
-
-    # =============================
-    # LẤY THÔNG TIN HỌC PHẦN
-    # =============================
-    cursor.execute(
-    """
-    SELECT HocPhan.*,
-           DonVi.TenDV
-    FROM HocPhan
-    LEFT JOIN DonVi
-    ON HocPhan.MaDV = DonVi.MaDV
-    WHERE HocPhan.MaHP=?
-    """,
-    (MaHP,)
-    )
-
-    hocphan = cursor.fetchone()
-
-
-    # =============================
-    # LẤY DANH SÁCH GIẢNG VIÊN
-    # =============================
-    cursor.execute(
-    """
-    SELECT CanBo.MaQL,
-        CanBo.TenGV,
-        CanBo.MaDV,
-        CanBo.Email,
-        CanBo.LoaiGV,
-        CanBo.LaTruongKhoa,
-        DonVi.TenDV
-    FROM CanBo
-    LEFT JOIN DonVi
-    ON CanBo.MaDV = DonVi.MaDV
-    """
-    )
-    dsCanBo = cursor.fetchall()
-
-
-    # =============================
-    # GIẢNG VIÊN ĐÃ ĐƯỢC PHÂN CÔNG
-    # =============================
-    cursor.execute(
-    """
-    SELECT MaGV
-    FROM PhanCongHC
-    WHERE MaHP=?
-    """,
-    (MaHP,)
-    )
-
-    dsDaChon = [x["MaGV"] for x in cursor.fetchall()]
-
-    conn.close()
-
-    return render_template(
-        "adminKhoa_hocphan_authorize.html",
-        hocphan=hocphan,
-        dsCanBo=dsCanBo,
-        dsDaChon=dsDaChon,
-    )
-
-
-# =============================
-# SAVE AUTHORIZE
-# =============================
-@app.route("/adminKhoa_hocphan_authorize_save", methods=["POST"])
-def adminKhoa_hocphan_authorize_save():
-
-    MaHP = request.form["MaHP"]
-
-    # lấy danh sách checkbox
-    dsGV = request.form.getlist("MaGV[]")
-
-    conn = get_db()
-    cursor = conn.cursor()
-
-    # xóa phân công cũ
-    cursor.execute(
-        """
-        DELETE FROM PhanCongHC
-        WHERE MaHP=?
-        """,
-        (MaHP,),
-    )
-
-    # insert mới
-    for MaGV in dsGV:
-
-        cursor.execute(
-            """
-            INSERT INTO PhanCongHC(MaGV,MaHP)
-            VALUES (?,?)
-            """,
-            (MaGV, MaHP),
-        )
-
-    conn.commit()
-    conn.close()
-
-    return redirect("/adminKhoa_hocphan_dashboard")
 
 @app.route("/gv_dashboard")
 def gv_dashboard():
@@ -297,6 +150,19 @@ def gv_dashboard():
 
     cursor.execute(
         """
+        SELECT CanBo.*, DonVi.TenDV
+        FROM CanBo
+        JOIN DonVi 
+            ON CanBo.MaDV = DonVi.MaDV
+        WHERE MaQL = ?
+        """,
+        (MaGV,),
+    )
+    # Lấy thông tin của giảng viên
+    ThongTinCanBo = cursor.fetchone()
+
+    cursor.execute(
+        """
         SELECT HocPhan.*, DonVi.TenDV, ThoiGian 
         FROM HocPhan
         JOIN PhanCongHC 
@@ -307,21 +173,8 @@ def gv_dashboard():
         """,
         (MaGV,),
     )
-
+    # Danh sách học phần được phân công
     dsHocPhan = cursor.fetchall()
-
-    cursor.execute(
-        """
-        SELECT CanBo.*, DonVi.TenDV
-        FROM CanBo
-        JOIN DonVi 
-            ON CanBo.MaDV = DonVi.MaDV
-        WHERE MaQL = ?
-        """,
-    (MaGV,),
-    )
-    ThongTinCanBo = cursor.fetchone()
-
 
     conn.close()
 
@@ -331,7 +184,9 @@ def gv_dashboard():
         ThongTinCanBo=ThongTinCanBo,
     )
 
+# Import tất cả các hàm, biến và route
 from admin import *
+from adminKhoa import *
 
 if __name__ == '__main__':
     app.run(debug=True)
