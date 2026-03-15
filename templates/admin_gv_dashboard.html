@@ -16,8 +16,10 @@
 <thead>
 <tr>
 <th>Mã GV</th>
+<th>Số hiệu</th>
 <th>Tên GV</th>
 <th>Email</th>
+<th>Loại GV</th>
 <th>Khoa</th>
 <th>Trưởng khoa</th>
 <th>Cập nhật</th>
@@ -36,9 +38,17 @@
 <input type="hidden" name="MaQL" value="{{ gv.MaQL }}">
 </td>
 
+<td>
+{{ gv.SoHieu }}
+</td>
+
 <td>{{ gv.TenGV }}</td>
 
 <td>{{ gv.Email }}</td>
+
+<td>
+{{ gv.LoaiGV }}
+</td>
 
 <td>
 <select name="MaDV" class="select-khoa">

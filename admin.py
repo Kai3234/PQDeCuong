@@ -27,6 +27,7 @@ def admin_gv_dashboard():
            CanBo.TenGV,
            CanBo.SoHieu,
            CanBo.Email,
+           CanBo.LoaiGV,
            CanBo.MaDV,
            DonVi.TenDV,
            CanBo.LaTruongKhoa
