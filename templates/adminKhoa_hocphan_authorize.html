@@ -1,6 +1,60 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
-<h2>Dashboard Admin GV</h2>
-<p>Welcome user</p>
+<div class="dashboard-container">
+  <div class="dashboard-title">Phân công hiệu chỉnh đề cương</div>
+
+  <h5>Học phần: {{ hocphan.TenHP }}</h5>
+
+  <form method="POST" action="/adminKhoa_hocphan_authorize_save">
+    <input type="hidden" name="MaHP" value="{{ hocphan.MaHP }}" />
+
+    <table class="dashboard-table">
+      <thead>
+        <tr>
+          <th>Chọn</th>
+          <th>Mã GV</th>
+          <th>Tên giảng viên</th>
+          <th>Khoa</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for gv in dsCanBo %}
+
+        <tr>
+          <td>
+            <input
+              type="checkbox"
+              name="MaGV[]"
+              value="{{ gv.MaQL }}"
+              {%
+              if
+              gv.MaQL
+              in
+              dsDaChon
+              %}checked{%
+              endif
+              %}
+            />
+          </td>
+
+          <td>{{ gv.MaQL }}</td>
+          <td>{{ gv.TenGV }}</td>
+          <td>{{ gv.MaDV }}</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <br />
+
+    <button class="btn-action btn-save">Lưu phân công</button>
+
+    <a class="btn-action btn-edit" href="/adminKhoa_hocphan_dashboard">
+      Quay lại
+    </a>
+  </form>
+</div>
+
 {% endblock %}

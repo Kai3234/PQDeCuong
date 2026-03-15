@@ -1,0 +1,113 @@
+/* ===== DASHBOARD TABLE ===== */
+
+.dashboard-container {
+  width: 90%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.dashboard-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.dashboard-table th {
+  background: #34495e;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.dashboard-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.dashboard-table tr:hover {
+  background: #f2f2f2;
+}
+
+/* ===== BUTTON ===== */
+
+.btn-action {
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+}
+
+.btn-edit {
+  background: #3498db;
+}
+
+.btn-edit:hover {
+  background: #2980b9;
+}
+
+.btn-save {
+  background: #2ecc71;
+}
+
+.btn-save:hover {
+  background: #27ae60;
+}
+
+/* ===== CHECKBOX LIST ===== */
+
+.checkbox-list {
+  margin-top: 10px;
+}
+
+.checkbox-item {
+  margin-bottom: 8px;
+}
+/* ===== GV DASHBOARD ===== */
+
+.gv-container {
+  width: 90%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.gv-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.gv-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.gv-table th {
+  background: #2c3e50;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.gv-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.gv-table tr:hover {
+  background: #f5f5f5;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+}

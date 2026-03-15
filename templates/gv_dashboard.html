@@ -1,6 +1,35 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
-<h2>Dashboard Admin GV</h2>
-<p>Welcome user</p>
+<div class="gv-container">
+  <div class="gv-title">Danh sách đề cương được phân công hiệu chỉnh</div>
+
+  <table class="gv-table">
+    <thead>
+      <tr>
+        <th>Mã học phần</th>
+        <th>Tên học phần</th>
+        <th>Số tín chỉ</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% if dsHocPhan %} {% for hp in dsHocPhan %}
+
+      <tr>
+        <td>{{ hp.MaHP }}</td>
+        <td>{{ hp.TenHP }}</td>
+        <td>{{ hp.SoTC }}</td>
+      </tr>
+
+      {% endfor %} {% else %}
+
+      <tr>
+        <td colspan="3" class="empty-row">Chưa có học phần được phân công</td>
+      </tr>
+
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
 {% endblock %}
