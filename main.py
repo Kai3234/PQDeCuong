@@ -99,6 +99,19 @@ def check_exists(TenTK, MK):
     conn.close()
     return result
 
+@app.before_request
+def update_truong_khoa():
+    if 'current_user' in session:
+        user = session['current_user']
+
+        if user["MaGV"] is not None:
+            obj_CanBo = get_obj_CanBo(user["MaGV"])
+            session['current_user']["LaTruongKhoa"] = obj_CanBo[6]
+        else:
+            session['current_user']["LaTruongKhoa"] = 0
+
+        session.modified = True
+
 @app.route('/logout')
 def logout():
     session.pop('current_user', None)
