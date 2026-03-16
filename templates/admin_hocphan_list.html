@@ -14,17 +14,24 @@ Quản lí học phần
 <div class="search-box">
 
 <form method="GET" action="/admin_hocphan_list">
+<select name="type" class="select-khoa">
+
+<option value="">Chọn tiêu chí</option>
+<option value="MaHP">Mã học phần</option>
+<option value="TenHP">Tên học phần</option>
+<option value="TrinhDo">Trình độ</option>
+
+</select>
 
 <input
 type="text"
 name="keyword"
-placeholder="Tìm theo mã học phần hoặc tên học phần"
-value="{{ keyword if keyword else '' }}"
+placeholder="Nhập từ khóa"
 >
 
-<button class="btn-save">
-Tìm
-</button>
+<button class="btn-save">Tìm</button>
+
+<a href="/admin_hocphan_list" class="btn-reset">Reset</a>
 
 </form>
 

@@ -9,7 +9,6 @@ DATABASE = "db/decuong.db"
 # ======================
 # ADMIN GIANG VIEN
 # ======================
-
 @app.route("/admin_gv_dashboard")
 def admin_gv_dashboard():
 
@@ -17,39 +16,44 @@ def admin_gv_dashboard():
         return redirect("/login")
 
     keyword = request.args.get("keyword")
+    type_search = request.args.get("type")
 
     conn = get_db()
     cur = conn.cursor()
 
-    if keyword:
-        cur.execute("""
-        SELECT CanBo.MaQL,
-               CanBo.TenGV,
-               CanBo.SoHieu,
-               CanBo.Email,
-               CanBo.LoaiGV,
-               CanBo.MaDV,
-               DonVi.TenDV,
-               CanBo.LaTruongKhoa
-        FROM CanBo
-        LEFT JOIN DonVi
-        ON CanBo.MaDV = DonVi.MaDV
-        WHERE CanBo.MaQL LIKE ? OR CanBo.TenGV LIKE ?
-        """, ('%'+keyword+'%', '%'+keyword+'%'))
-    else:
-        cur.execute("""
-        SELECT CanBo.MaQL,
-               CanBo.TenGV,
-               CanBo.SoHieu,
-               CanBo.Email,
-               CanBo.LoaiGV,
-               CanBo.MaDV,
-               DonVi.TenDV,
-               CanBo.LaTruongKhoa
-        FROM CanBo
-        LEFT JOIN DonVi
-        ON CanBo.MaDV = DonVi.MaDV
-        """)
+    query = """
+    SELECT CanBo.MaQL,
+           CanBo.TenGV,
+           CanBo.SoHieu,
+           CanBo.Email,
+           CanBo.LoaiGV,
+           CanBo.MaDV,
+           DonVi.TenDV,
+           CanBo.LaTruongKhoa
+    FROM CanBo
+    LEFT JOIN DonVi
+    ON CanBo.MaDV = DonVi.MaDV
+    WHERE 1=1
+    """
+
+    params = []
+
+    if keyword and type_search:
+
+        keyword = "%" + keyword + "%"
+
+        if type_search == "MaQL":
+            query += " AND CanBo.MaQL LIKE ?"
+
+        elif type_search == "TenGV":
+            query += " AND CanBo.TenGV LIKE ?"
+
+        elif type_search == "LoaiGV":
+            query += " AND CanBo.LoaiGV LIKE ?"
+
+        params.append(keyword)
+
+    cur.execute(query, params)
 
     canbo_list = cur.fetchall()
 
@@ -61,11 +65,8 @@ def admin_gv_dashboard():
     return render_template(
         "admin_gv_dashboard.html",
         canbo_list=canbo_list,
-        donvi_list=donvi_list,
-        keyword=keyword
+        donvi_list=donvi_list
     )
-
-
 # ======================
 # UPDATE GIANG VIEN
 # ======================
@@ -101,7 +102,6 @@ def update_giangvien():
 # ======================
 # ADMIN HOC PHAN
 # ======================
-
 @app.route("/admin_hocphan_list")
 def admin_hocphan_list():
 
@@ -109,35 +109,42 @@ def admin_hocphan_list():
         return redirect("/login")
 
     keyword = request.args.get("keyword")
+    type_search = request.args.get("type")
 
     conn = get_db()
     cur = conn.cursor()
 
-    if keyword:
-        cur.execute("""
-        SELECT HocPhan.MaHP,
-               HocPhan.TenHP,
-               HocPhan.SoTC,
-               HocPhan.TrinhDo,
-               HocPhan.MaDV,
-               DonVi.TenDV
-        FROM HocPhan
-        LEFT JOIN DonVi
-        ON HocPhan.MaDV = DonVi.MaDV
-        WHERE HocPhan.MaHP LIKE ? OR HocPhan.TenHP LIKE ?
-        """, ('%'+keyword+'%', '%'+keyword+'%'))
-    else:
-        cur.execute("""
-        SELECT HocPhan.MaHP,
-               HocPhan.TenHP,
-               HocPhan.SoTC,
-               HocPhan.TrinhDo,
-               HocPhan.MaDV,
-               DonVi.TenDV
-        FROM HocPhan
-        LEFT JOIN DonVi
-        ON HocPhan.MaDV = DonVi.MaDV
-        """)
+    query = """
+    SELECT HocPhan.MaHP,
+           HocPhan.TenHP,
+           HocPhan.SoTC,
+           HocPhan.TrinhDo,
+           HocPhan.MaDV,
+           DonVi.TenDV
+    FROM HocPhan
+    LEFT JOIN DonVi
+    ON HocPhan.MaDV = DonVi.MaDV
+    WHERE 1=1
+    """
+
+    params = []
+
+    if keyword and type_search:
+
+        keyword = "%" + keyword + "%"
+
+        if type_search == "MaHP":
+            query += " AND HocPhan.MaHP LIKE ?"
+
+        elif type_search == "TenHP":
+            query += " AND HocPhan.TenHP LIKE ?"
+
+        elif type_search == "TrinhDo":
+            query += " AND HocPhan.TrinhDo LIKE ?"
+
+        params.append(keyword)
+
+    cur.execute(query, params)
 
     hocphan_list = cur.fetchall()
 
@@ -149,10 +156,8 @@ def admin_hocphan_list():
     return render_template(
         "admin_hocphan_list.html",
         hocphan_list=hocphan_list,
-        donvi_list=donvi_list,
-        keyword=keyword
+        donvi_list=donvi_list
     )
-
 
 # ======================
 # UPDATE HOC PHAN
