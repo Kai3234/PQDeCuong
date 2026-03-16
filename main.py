@@ -145,6 +145,9 @@ def gv_dashboard():
 
     MaGV = session["current_user"]["MaGV"]
 
+    keyword = request.args.get("keyword")
+    type_search = request.args.get("type")
+
     conn = get_db()
     cursor = conn.cursor()
 
@@ -161,19 +164,39 @@ def gv_dashboard():
     # Lấy thông tin của giảng viên
     ThongTinCanBo = cursor.fetchone()
 
-    cursor.execute(
-        """
-        SELECT HocPhan.*, DonVi.TenDV, ThoiGian 
-        FROM HocPhan
-        JOIN PhanCongHC 
-            ON HocPhan.MaHP = PhanCongHC.MaHP
-        JOIN DonVi 
-            ON HocPhan.MaDV = DonVi.MaDV
-        WHERE PhanCongHC.MaGV = ?
-        """,
-        (MaGV,),
-    )
-    # Danh sách học phần được phân công
+    query = """
+    SELECT HocPhan.*, DonVi.TenDV, ThoiGian 
+    FROM HocPhan
+    JOIN PhanCongHC 
+        ON HocPhan.MaHP = PhanCongHC.MaHP
+    JOIN DonVi 
+        ON HocPhan.MaDV = DonVi.MaDV
+    WHERE PhanCongHC.MaGV = ?
+    """
+
+
+    params = [MaGV]
+
+    # SEARCH
+    if keyword and type_search:
+
+
+        if type_search == "MaHP":
+            query += " AND HocPhan.MaHP LIKE ?"
+
+        elif type_search == "TenHP":
+            query += " AND HocPhan.TenHP LIKE ?"
+
+        elif type_search == "TenDV":
+            query += " AND DonVi.TenDV LIKE ?"
+
+        elif type_search == "ThoiGian":
+            query += " AND PhanCongHC.ThoiGian LIKE ?"
+
+        params.append("%" + keyword + "%")
+
+    cursor.execute(query, params)
+
     dsHocPhan = cursor.fetchall()
 
     conn.close()
@@ -182,6 +205,8 @@ def gv_dashboard():
         "gv_dashboard.html",
         dsHocPhan=dsHocPhan,
         ThongTinCanBo=ThongTinCanBo,
+        keyword=keyword,
+        type_search=type_search
     )
 
 # Import tất cả các hàm, biến và route

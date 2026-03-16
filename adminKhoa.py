@@ -62,7 +62,9 @@ def adminKhoa_hocphan_dashboard():
 
     return render_template(
         "adminKhoa_hocphan_dashboard.html",
-        dsHocPhan=dsHocPhan
+        dsHocPhan=dsHocPhan,
+        keyword=keyword,
+        type_search=type_search
     )
 
 
@@ -115,24 +117,13 @@ def adminKhoa_hocphan_authorize(MaHP):
     # =============================
     if keyword and type_search:
 
-        keyword = "%" + keyword + "%"
-
         if type_search == "TenDV":
             query += " AND DonVi.TenDV LIKE ?"
-            params.append(keyword)
 
-        elif type_search == "Email":
-            query += " AND CanBo.Email LIKE ?"
-            params.append(keyword)
+        else:
+            query += f" AND CanBo.{type_search} LIKE ?"
 
-        elif type_search == "TenGV":
-            query += " AND CanBo.TenGV LIKE ?"
-            params.append(keyword)
-
-        elif type_search == "MaQL":
-            query += " AND CanBo.MaQL LIKE ?"
-            params.append(keyword)
-
+        params.append("%" + keyword + "%")
 
     cursor.execute(query, params)
 
@@ -157,7 +148,9 @@ def adminKhoa_hocphan_authorize(MaHP):
         "adminKhoa_hocphan_authorize.html",
         hocphan=hocphan,
         dsCanBo=dsCanBo,
-        dsDaChon=dsDaChon
+        dsDaChon=dsDaChon,
+        keyword=keyword,
+        type_search=type_search
     )
 
 # =============================

@@ -22,13 +22,13 @@
     class="search-box"
   >
     <select name="type" class="search-select">
-      <option value="MaQL">Mã GV</option>
+      <option value="MaQL" {% if type_search =="MaQL" %}selected{% endif %}>Mã GV</option>
 
-      <option value="TenGV">Tên GV</option>
+      <option value="TenGV" {% if type_search =="TenGV" %}selected{% endif %}>Tên GV</option>
 
-      <option value="Email">Email</option>
+      <option value="Email" {% if type_search =="Email" %}selected{% endif %}>Email</option>
 
-      <option value="TenDV">Khoa</option>
+      <option value="TenDV" {% if type_search =="TenDV" %}selected{% endif %}>Khoa</option>
     </select>
 
     <input
@@ -36,6 +36,7 @@
       name="keyword"
       placeholder="Nhập từ khóa..."
       class="search-input"
+      value="{{ keyword or '' }}"
     />
 
     <button type="submit" class="btn-search">Tìm</button>
@@ -57,6 +58,8 @@
           <th>Mã GV</th>
 
           <th>Tên giảng viên</th>
+
+          <th>Mã khoa</th>
 
           <th>Khoa</th>
 
@@ -92,7 +95,9 @@
 
           <td>{{ gv.TenGV }}</td>
 
-          <td>{{ gv.MaDV }} - {{ gv.TenDV }}</td>
+          <td>{{ gv.MaDV }}</td>
+
+          <td>{{ gv.TenDV }}</td>
 
           <td>{{ gv.Email }}</td>
 

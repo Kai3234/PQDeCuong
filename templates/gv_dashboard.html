@@ -3,6 +3,7 @@
 <div class="gv-container">
   <div class="gv-title">Danh sách đề cương được phân công hiệu chỉnh</div>
 
+
   <div class="gv-info">
     <div class ="gv-info-title">Thông tin giảng viên:</div>
 
@@ -22,6 +23,27 @@
       <b>- Trưởng khoa</b>
     {% endif %}
   </div>
+
+  <form method="GET" class="search-box">
+    <select name="type" class="search-select">
+      <option value="MaHP" {% if type_search =="MaHP" %}selected{% endif %}>Mã học phần</option>
+      <option value="TenHP" {% if type_search =="TenHP" %}selected{% endif %}>Tên học phần</option>
+      <option value="TenDV" {% if type_search =="TenDV" %}selected{% endif %}>Khoa</option>
+      <option value="ThoiGian" {% if type_search =="ThoiGian" %}selected{% endif %}>Thời gian</option>
+    </select>
+
+    <input
+      type="text"
+      name="keyword"
+      placeholder="Nhập từ khóa..."
+      value="{{ keyword or '' }}"
+      class="search-input"
+    />
+
+    <button type="submit" class="btn-search">Tìm</button>
+
+    <a href="/gv_dashboard" class="btn-reset">Reset</a>
+  </form>
 
   <table class="gv-table">
     <thead>

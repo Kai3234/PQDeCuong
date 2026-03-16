@@ -6,8 +6,8 @@
   <!-- SEARCH -->
   <form method="GET" action="/adminKhoa_hocphan_dashboard" class="search-box">
     <select name="type" class="search-select">
-      <option value="MaHP">Mã học phần</option>
-      <option value="TenHP">Tên học phần</option>
+      <option value="MaHP" {% if type_search =="MaHP" %}selected{% endif %}>Mã học phần</option>
+      <option value="TenHP" {% if type_search =="TenHP" %}selected{% endif %}>Tên học phần</option>
     </select>
 
     <input
@@ -15,6 +15,7 @@
       name="keyword"
       placeholder="Nhập từ khóa..."
       class="search-input"
+      value="{{ keyword or '' }}"
     />
 
     <button type="submit" class="btn-search">Tìm</button>
