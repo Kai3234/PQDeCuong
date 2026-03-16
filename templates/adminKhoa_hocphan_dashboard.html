@@ -3,6 +3,26 @@
 <div class="dashboard-container">
   <div class="dashboard-title">Danh sách học phần của khoa</div>
 
+  <!-- SEARCH -->
+  <form method="GET" action="/adminKhoa_hocphan_dashboard" class="search-box">
+    <select name="type" class="search-select">
+      <option value="MaHP">Mã học phần</option>
+      <option value="TenHP">Tên học phần</option>
+    </select>
+
+    <input
+      type="text"
+      name="keyword"
+      placeholder="Nhập từ khóa..."
+      class="search-input"
+    />
+
+    <button type="submit" class="btn-search">Tìm</button>
+
+    <a href="/adminKhoa_hocphan_dashboard" class="btn-reset">Reset</a>
+  </form>
+
+  <!-- TABLE -->
   <table class="dashboard-table">
     <thead>
       <tr>
@@ -17,12 +37,17 @@
 
     <tbody>
       {% for hp in dsHocPhan %}
+
       <tr>
         <td>{{ hp.MaHP }}</td>
+
         <td>{{ hp.TenHP }}</td>
+
         <td>{{ hp.SoTC }}</td>
+
         <td>{{ hp.TrinhDo }}</td>
-        <td>{{ hp.TenDV }}</td>
+
+        <td>{{ hp.MaDV }} - {{ hp.TenDV }}</td>
 
         <td>
           <a
@@ -33,6 +58,7 @@
           </a>
         </td>
       </tr>
+
       {% endfor %}
     </tbody>
   </table>

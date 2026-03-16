@@ -6,6 +6,8 @@ from main import get_obj_CanBo, get_db, app
 # =============================
 # ADMIN KHOA DASHBOARD
 # =============================
+
+
 @app.route("/adminKhoa_hocphan_dashboard")
 def adminKhoa_hocphan_dashboard():
 
@@ -21,23 +23,38 @@ def adminKhoa_hocphan_dashboard():
 
     MaDV = obj_canbo["MaDV"]
 
+    keyword = request.args.get("keyword")
+    type_search = request.args.get("type")
+
     conn = get_db()
     cursor = conn.cursor()
 
-    cursor.execute(
-    """
+    query = """
     SELECT HocPhan.MaHP,
-        HocPhan.TenHP,
-        HocPhan.SoTC,
-        HocPhan.TrinhDo,
-        DonVi.TenDV
+           HocPhan.TenHP,
+           HocPhan.SoTC,
+           HocPhan.TrinhDo,
+           HocPhan.MaDV,
+           DonVi.TenDV
     FROM HocPhan
     LEFT JOIN DonVi
     ON HocPhan.MaDV = DonVi.MaDV
     WHERE HocPhan.MaDV=?
-    """,
-    (MaDV,),
-    )
+    """
+
+    params = [MaDV]
+
+    # SEARCH
+    if keyword and type_search:
+
+        if type_search == "TenDV":
+            query += " AND DonVi.TenDV LIKE ?"
+        else:
+            query += f" AND HocPhan.{type_search} LIKE ?"
+
+        params.append("%" + keyword + "%")
+
+    cursor.execute(query, params)
 
     dsHocPhan = cursor.fetchall()
 
@@ -45,7 +62,7 @@ def adminKhoa_hocphan_dashboard():
 
     return render_template(
         "adminKhoa_hocphan_dashboard.html",
-        dsHocPhan=dsHocPhan,
+        dsHocPhan=dsHocPhan
     )
 
 
@@ -55,60 +72,84 @@ def adminKhoa_hocphan_dashboard():
 @app.route("/adminKhoa_hocphan_authorize/<MaHP>")
 def adminKhoa_hocphan_authorize(MaHP):
 
+    keyword = request.args.get("keyword")
+    type_search = request.args.get("type")
+
     conn = get_db()
     cursor = conn.cursor()
 
     # =============================
-    # LẤY THÔNG TIN HỌC PHẦN
+    # THÔNG TIN HỌC PHẦN
     # =============================
-    cursor.execute(
-    """
-    SELECT HocPhan.*,
-           DonVi.TenDV
-    FROM HocPhan
-    LEFT JOIN DonVi
-    ON HocPhan.MaDV = DonVi.MaDV
-    WHERE HocPhan.MaHP=?
-    """,
-    (MaHP,)
-    )
+    cursor.execute("""
+        SELECT HocPhan.*, DonVi.TenDV
+        FROM HocPhan
+        LEFT JOIN DonVi ON HocPhan.MaDV = DonVi.MaDV
+        WHERE HocPhan.MaHP=?
+    """,(MaHP,))
 
     hocphan = cursor.fetchone()
 
 
     # =============================
-    # LẤY DANH SÁCH GIẢNG VIÊN
+    # QUERY GIẢNG VIÊN
     # =============================
-    cursor.execute(
-    """
+    query = """
     SELECT CanBo.MaQL,
-        CanBo.TenGV,
-        CanBo.MaDV,
-        CanBo.Email,
-        CanBo.LoaiGV,
-        CanBo.LaTruongKhoa,
-        DonVi.TenDV
+           CanBo.TenGV,
+           CanBo.MaDV,
+           CanBo.Email,
+           CanBo.LoaiGV,
+           CanBo.LaTruongKhoa,
+           DonVi.TenDV
     FROM CanBo
-    LEFT JOIN DonVi
-    ON CanBo.MaDV = DonVi.MaDV
+    LEFT JOIN DonVi ON CanBo.MaDV = DonVi.MaDV
+    WHERE 1=1
     """
-    )
+
+    params = []
+
+
+    # =============================
+    # SEARCH
+    # =============================
+    if keyword and type_search:
+
+        keyword = "%" + keyword + "%"
+
+        if type_search == "TenDV":
+            query += " AND DonVi.TenDV LIKE ?"
+            params.append(keyword)
+
+        elif type_search == "Email":
+            query += " AND CanBo.Email LIKE ?"
+            params.append(keyword)
+
+        elif type_search == "TenGV":
+            query += " AND CanBo.TenGV LIKE ?"
+            params.append(keyword)
+
+        elif type_search == "MaQL":
+            query += " AND CanBo.MaQL LIKE ?"
+            params.append(keyword)
+
+
+    cursor.execute(query, params)
+
     dsCanBo = cursor.fetchall()
 
 
     # =============================
-    # GIẢNG VIÊN ĐÃ ĐƯỢC PHÂN CÔNG
+    # GIẢNG VIÊN ĐÃ PHÂN CÔNG
     # =============================
-    cursor.execute(
-    """
-    SELECT MaGV
-    FROM PhanCongHC
-    WHERE MaHP=?
-    """,
-    (MaHP,)
-    )
+    cursor.execute("""
+        SELECT MaGV
+        FROM PhanCongHC
+        WHERE MaHP=?
+    """,(MaHP,))
 
     dsDaChon = [x["MaGV"] for x in cursor.fetchall()]
+
 
     conn.close()
 
@@ -116,9 +157,8 @@ def adminKhoa_hocphan_authorize(MaHP):
         "adminKhoa_hocphan_authorize.html",
         hocphan=hocphan,
         dsCanBo=dsCanBo,
-        dsDaChon=dsDaChon,
+        dsDaChon=dsDaChon
     )
-
 
 # =============================
 # SAVE AUTHORIZE
@@ -128,31 +168,26 @@ def adminKhoa_hocphan_authorize_save():
 
     MaHP = request.form["MaHP"]
 
-    # lấy danh sách checkbox
     dsGV = request.form.getlist("MaGV[]")
 
     conn = get_db()
     cursor = conn.cursor()
 
-    # xóa phân công cũ
-    cursor.execute(
-        """
+    # XÓA PHÂN CÔNG CŨ
+    cursor.execute("""
         DELETE FROM PhanCongHC
         WHERE MaHP=?
-        """,
-        (MaHP,),
-    )
+    """,(MaHP,))
 
-    # insert mới
+
+    # THÊM PHÂN CÔNG MỚI
     for MaGV in dsGV:
 
-        cursor.execute(
-            """
+        cursor.execute("""
             INSERT INTO PhanCongHC(MaGV,MaHP)
             VALUES (?,?)
-            """,
-            (MaGV, MaHP),
-        )
+        """,(MaGV,MaHP))
+
 
     conn.commit()
     conn.close()

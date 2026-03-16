@@ -15,6 +15,37 @@
     <b>Khoa:</b> {{ hocphan.MaDV }} - {{ hocphan.TenDV }}
   </div>
 
+  <!-- SEARCH -->
+  <form
+    method="GET"
+    action="/adminKhoa_hocphan_authorize/{{ hocphan.MaHP }}"
+    class="search-box"
+  >
+    <select name="type" class="search-select">
+      <option value="MaQL">Mã GV</option>
+
+      <option value="TenGV">Tên GV</option>
+
+      <option value="Email">Email</option>
+
+      <option value="TenDV">Khoa</option>
+    </select>
+
+    <input
+      type="text"
+      name="keyword"
+      placeholder="Nhập từ khóa..."
+      class="search-input"
+    />
+
+    <button type="submit" class="btn-search">Tìm</button>
+
+    <a href="/adminKhoa_hocphan_authorize/{{ hocphan.MaHP }}" class="btn-reset">
+      Reset
+    </a>
+  </form>
+
+  <!-- SAVE AUTHORIZE -->
   <form method="POST" action="/adminKhoa_hocphan_authorize_save">
     <input type="hidden" name="MaHP" value="{{ hocphan.MaHP }}" />
 
@@ -22,11 +53,17 @@
       <thead>
         <tr>
           <th>Chọn</th>
+
           <th>Mã GV</th>
+
           <th>Tên giảng viên</th>
+
           <th>Khoa</th>
+
           <th>Email</th>
+
           <th>Loại GV</th>
+
           <th>Trưởng khoa</th>
         </tr>
       </thead>
@@ -52,9 +89,13 @@
           </td>
 
           <td>{{ gv.MaQL }}</td>
+
           <td>{{ gv.TenGV }}</td>
+
           <td>{{ gv.MaDV }} - {{ gv.TenDV }}</td>
+
           <td>{{ gv.Email }}</td>
+
           <td>{{ gv.LoaiGV }}</td>
 
           <td>{% if gv.LaTruongKhoa == 1 %} ✔ {% else %} - {% endif %}</td>
@@ -66,7 +107,7 @@
 
     <br />
 
-    <button class="btn-action btn-save">Lưu phân công</button>
+    <button type="submit" class="btn-action btn-save">Lưu phân công</button>
 
     <a class="btn-action btn-edit" href="/adminKhoa_hocphan_dashboard">
       Quay lại
