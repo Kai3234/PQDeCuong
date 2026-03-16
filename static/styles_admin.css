@@ -87,3 +87,17 @@ cursor: pointer;
 {
 background: #2980b9;
 }
+
+.search-box
+{
+margin-bottom: 20px;
+}
+
+.search-box input
+{
+padding: 6px 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+width: 260px;
+margin-right: 8px;
+}

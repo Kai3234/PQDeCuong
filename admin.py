@@ -12,25 +12,44 @@ DATABASE = "db/decuong.db"
 
 @app.route("/admin_gv_dashboard")
 def admin_gv_dashboard():
+
     if "current_user" not in session:
         return redirect("/login")
+
+    keyword = request.args.get("keyword")
 
     conn = get_db()
     cur = conn.cursor()
 
-    cur.execute("""
-    SELECT CanBo.MaQL,
-           CanBo.TenGV,
-           CanBo.SoHieu,
-           CanBo.Email,
-           CanBo.LoaiGV,
-           CanBo.MaDV,
-           DonVi.TenDV,
-           CanBo.LaTruongKhoa
-    FROM CanBo
-    LEFT JOIN DonVi
-    ON CanBo.MaDV = DonVi.MaDV
-    """)
+    if keyword:
+        cur.execute("""
+        SELECT CanBo.MaQL,
+               CanBo.TenGV,
+               CanBo.SoHieu,
+               CanBo.Email,
+               CanBo.LoaiGV,
+               CanBo.MaDV,
+               DonVi.TenDV,
+               CanBo.LaTruongKhoa
+        FROM CanBo
+        LEFT JOIN DonVi
+        ON CanBo.MaDV = DonVi.MaDV
+        WHERE CanBo.MaQL LIKE ? OR CanBo.TenGV LIKE ?
+        """, ('%'+keyword+'%', '%'+keyword+'%'))
+    else:
+        cur.execute("""
+        SELECT CanBo.MaQL,
+               CanBo.TenGV,
+               CanBo.SoHieu,
+               CanBo.Email,
+               CanBo.LoaiGV,
+               CanBo.MaDV,
+               DonVi.TenDV,
+               CanBo.LaTruongKhoa
+        FROM CanBo
+        LEFT JOIN DonVi
+        ON CanBo.MaDV = DonVi.MaDV
+        """)
 
     canbo_list = cur.fetchall()
 
@@ -42,7 +61,8 @@ def admin_gv_dashboard():
     return render_template(
         "admin_gv_dashboard.html",
         canbo_list=canbo_list,
-        donvi_list=donvi_list
+        donvi_list=donvi_list,
+        keyword=keyword
     )
 
 
@@ -52,7 +72,6 @@ def admin_gv_dashboard():
 
 @app.route("/update_giangvien", methods=["POST"])
 def update_giangvien():
-
 
     MaQL = request.form["MaQL"]
     MaDV = request.form["MaDV"]
@@ -85,23 +104,40 @@ def update_giangvien():
 
 @app.route("/admin_hocphan_list")
 def admin_hocphan_list():
+
     if "current_user" not in session:
         return redirect("/login")
+
+    keyword = request.args.get("keyword")
 
     conn = get_db()
     cur = conn.cursor()
 
-    cur.execute("""
-    SELECT HocPhan.MaHP,
-           HocPhan.TenHP,
-           HocPhan.SoTC,
-           HocPhan.TrinhDo,
-           HocPhan.MaDV,
-           DonVi.TenDV
-    FROM HocPhan
-    LEFT JOIN DonVi
-    ON HocPhan.MaDV = DonVi.MaDV
-    """)
+    if keyword:
+        cur.execute("""
+        SELECT HocPhan.MaHP,
+               HocPhan.TenHP,
+               HocPhan.SoTC,
+               HocPhan.TrinhDo,
+               HocPhan.MaDV,
+               DonVi.TenDV
+        FROM HocPhan
+        LEFT JOIN DonVi
+        ON HocPhan.MaDV = DonVi.MaDV
+        WHERE HocPhan.MaHP LIKE ? OR HocPhan.TenHP LIKE ?
+        """, ('%'+keyword+'%', '%'+keyword+'%'))
+    else:
+        cur.execute("""
+        SELECT HocPhan.MaHP,
+               HocPhan.TenHP,
+               HocPhan.SoTC,
+               HocPhan.TrinhDo,
+               HocPhan.MaDV,
+               DonVi.TenDV
+        FROM HocPhan
+        LEFT JOIN DonVi
+        ON HocPhan.MaDV = DonVi.MaDV
+        """)
 
     hocphan_list = cur.fetchall()
 
@@ -113,7 +149,8 @@ def admin_hocphan_list():
     return render_template(
         "admin_hocphan_list.html",
         hocphan_list=hocphan_list,
-        donvi_list=donvi_list
+        donvi_list=donvi_list,
+        keyword=keyword
     )
 
 

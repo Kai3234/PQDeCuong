@@ -7,6 +7,24 @@
 <div class="page-header">
 <h2>Danh sách giảng viên</h2>
 </div>
+    <div class="search-box">
+
+<form method="GET" action="/admin_gv_dashboard">
+
+<input
+type="text"
+name="keyword"
+placeholder="Tìm theo mã GV hoặc tên GV"
+value="{{ keyword if keyword else '' }}"
+>
+
+<button class="btn-save">
+Tìm
+</button>
+
+</form>
+
+</div>
 
 <div class="table-wrapper">
 
