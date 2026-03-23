@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Trang chủ Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="welcome-section">
+        <h1>Xin chào, <span class="highlight">{{ session.current_user.TenTK }}</span>!</h1>
+        <p>Chào mừng bạn trở lại hệ thống quản lý tín chỉ & đề cương đào tạo.</p>
+    </div>
+
+    <div class="cards-grid">
+        {% if session.current_user.LaAdmin == 1 %}
+        <a href="/admin_gv_dashboard" class="dashboard-card card-admin">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div class="card-content">
+                <h3>Quản lý giảng viên & Khoa</h3>
+                <p>Quản trị người dùng, giảng viên và thông tin các khoa đào tạo.</p>
+            </div>
+        </a>
+        <a href="/admin_hocphan_list" class="dashboard-card card-admin-hp">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <div class="card-content">
+                <h3>Quản lý học phần (Admin)</h3>
+                <p>Tra cứu cập nhật danh sách tất cả các học phần trong hệ thống.</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if session.current_user.LaTruongKhoa == 1 %}
+        <a href="/adminKhoa_hocphan_dashboard" class="dashboard-card card-khoa">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </div>
+            <div class="card-content">
+                <h3>Quản lý học phần thuộc khoa</h3>
+                <p>Khung quản trị học phần và cập nhật giáo trình dành cho Trưởng Khoa.</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if session.current_user.MaGV is not none %}
+        <a href="/gv_dashboard" class="dashboard-card card-gv">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div class="card-content">
+                <h3>Học phần phân công</h3>
+                <p>Xem danh sách các phân công giảng dạy thực tế và tải lên đề cương.</p>
+            </div>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

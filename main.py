@@ -26,7 +26,7 @@ def get_db():
 def index():
     # Kiểm tra có tồn tại current_user trong session
     if 'current_user' in session:
-        return render_template('base.html')
+        return render_template('home.html')
     return render_template('welcome.html')
 
 @app.route('/login', methods=['GET', 'POST'])

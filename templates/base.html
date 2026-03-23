@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_khoa.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles_gv.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_home.css') }}">
 
 </head>
 <body>
@@ -42,7 +43,7 @@
         {% endif %}
 
         <div class="menu-item user">
-            <a href="#">Xin chào {{ session.current_user.TenTK }} ▾</a>
+            <a href="/">Xin chào {{ session.current_user.TenTK }} ▾</a>
 
             <div class="dropdown">
                 <a href="/logout">Logout</a>
